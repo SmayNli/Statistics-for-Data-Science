@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Veri Bilimi İçin İstatistik — İnteraktif Eğitim Aracı (v3)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Sol Kenar Çubuğu -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand">
+          <span class="brand-icon">Σ</span>
+          <div>
+            <h1>İstatistik Akademi</h1>
+            <p class="brand-sub">Veri Bilimi Yol Haritası v3</p>
+          </div>
+        </div>
+        <button class="icon-btn mobile-close" id="closeSidebar" aria-label="Menüyü kapat">✕</button>
+      </div>
+
+      <!-- Genel İlerleme -->
+      <div class="progress-card">
+        <div class="progress-top">
+          <span>Genel İlerleme</span>
+          <strong id="overallProgressText">0 / 19 Konu</strong>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="overallProgressFill" style="width: 0%"></div>
+        </div>
+        <div class="progress-stats">
+          <span id="solvedQuestionsText">0 / 95 Soru Çözüldü</span>
+          <span id="correctRateText">%0 Doğruluk</span>
+        </div>
+      </div>
+
+      <!-- Arama ve Filtreler -->
+      <div class="sidebar-controls">
+        <input type="search" id="searchInput" class="search-input" placeholder="Konu veya kavram ara (örn: Bayes, VIF)..." />
+        <div class="filter-pills">
+          <button class="pill active" data-filter="all">Tümü</button>
+          <button class="pill" data-filter="core">Çekirdek</button>
+          <button class="pill" data-filter="optional">Seçmeli</button>
+          <button class="pill" data-filter="explain">✱ Açıklanabilirlik</button>
+        </div>
+      </div>
+
+      <!-- Konu Listesi -->
+      <nav class="topic-nav" id="topicNav" aria-label="Konu listesi"></nav>
+
+      <div class="sidebar-footer">
+        <button class="btn-secondary btn-sm" id="openRoadmapModal">🗺️ Çalışma Sırası &amp; Matris</button>
+        <button class="btn-secondary btn-sm" id="resetProgressBtn" title="Tüm ilerlemeyi sıfırla">↺ Sıfırla</button>
+      </div>
+    </aside>
+
+    <!-- Ana İçerik Alanı -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-btn mobile-menu-btn" id="openSidebar" aria-label="Menüyü aç">☰</button>
+          <div class="breadcrumb" id="breadcrumb">Ana Sayfa</div>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn-secondary btn-sm" id="prevTopicBtn">← Önceki</button>
+          <button class="btn-secondary btn-sm" id="nextTopicBtn">Sonraki →</button>
+          <button class="icon-btn" id="themeToggle" title="Tema Değiştir" aria-label="Tema Değiştir">🌙</button>
+        </div>
+      </header>
+
+      <main class="content-area" id="contentArea">
+        <!-- JS ile dinamik olarak doldurulur -->
+      </main>
+    </div>
+  </div>
+
+  <!-- Yol Haritası & Açıklanabilirlik Matrisi Modalı -->
+  <div class="modal-backdrop hidden" id="roadmapModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>🗺️ Önerilen Çalışma Sırası &amp; Açıklanabilirlik Eşleştirmesi</h2>
+        <button class="icon-btn" id="closeRoadmapModal" aria-label="Kapat">✕</button>
+      </div>
+      <div class="modal-body">
+        <h3>Önerilen Çalışma Sırası</h3>
+        <ol class="order-list">
+          <li><strong>Seviye 1'in tamamı (Çekirdek):</strong> Betimsel İstatistik → Veri Kalitesi &amp; Yanlılık → Temel Olasılık → Dağılımlar → Korelasyon &amp; Kovaryans.</li>
+          <li><strong>Seviye 2 (Çekirdek):</strong> Limit Teoremleri → Güven Aralığı → MLE → Hipotez Testleri (+ ilgili dağılımlar) → Bootstrap → Regresyon ve GLM → Bias-Variance. (Ayrıca Tahmin Ediciler ve Eksik Veri Mekanizmaları.)</li>
+          <li><strong>Seviye 3 (Çekirdek):</strong> Bilgi Teorisi → Çok Değişkenli İstatistik (PCA) → Bayesçi İstatistik → Hafif Nedensel Çıkarım.</li>
+          <li><strong>Seçmeliler:</strong> İhtiyaç doğdukça (Deney Tasarımı &amp; A/B Testi, MCMC, İleri Nedensellik, Zaman Serisi).</li>
+        </ol>
+
+        <h3>Projelerde Açıklanabilirlik İçin Kısa Eşleştirme</h3>
+        <div class="table-wrap">
+          <table class="info-table">
+            <thead>
+              <tr>
+                <th>Kavram</th>
+                <th>Projede Nasıl Kullanılır?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Güven aralığı ve bootstrap</td><td>Metrik ve katsayılara belirsizlik aralığı ekleyip "tek bir sayı" yerine aralık raporlamak</td></tr>
+              <tr><td>Etki büyüklüğü + p-değeri</td><td>"Anlamlı mı?" yerine "ne kadar büyük ve pratikte önemli mi?" sorusunu yanıtlamak</td></tr>
+              <tr><td>OLS / GLM katsayı yorumu</td><td>Özelliklerin etkisini sade dille (ör. odds ratio) anlatmak</td></tr>
+              <tr><td>VIF ve çoklu doğrusal bağlantı</td><td>Katsayıların neden kararsız olduğunu açıklamak</td></tr>
+              <tr><td>Çoklu test düzeltmesi</td><td>Çok sayıda özellik testinde yanlış keşifleri kontrol etmek</td></tr>
+              <tr><td>Eksik veri mekanizması</td><td>Imputation seçimini gerekçelendirmek</td></tr>
+              <tr><td>Bias-variance ve cross-validation</td><td>Overfitting'i ölçüp modelin genellemesini savunmak</td></tr>
+              <tr><td>Confounder / DAG mantığı</td><td>Korelasyonel bulguları nedensel iddiaya çevirmeden raporlamak</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KaTeX Scripts -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+
+  <!-- Eğitim İçeriği Verileri -->
+  <script src="data/level1.js"></script>
+  <script src="data/level2.js"></script>
+  <script src="data/level3.js"></script>
+
+  <!-- Ana Uygulama Mantığı -->
+  <script src="app.js"></script>
+</body>
+</html>
