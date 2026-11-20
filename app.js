@@ -742,6 +742,28 @@
           return `<strong>Cohen's d:</strong> ${d.toFixed(2)} &nbsp;|&nbsp; <strong>Bonferroni α (0.05/m):</strong> ${bonf.toFixed(4)}`;
         }
       },
+      "lab-confusion": {
+        title: "Confusion Matrix &amp; Sınıflandırma Metrikleri Hesaplayıcı",
+        fields: [
+          { id: "cmTP", label: "True Positive (TP)", type: "number", val: "40" },
+          { id: "cmFP", label: "False Positive (FP / Tip I)", type: "number", val: "50" },
+          { id: "cmFN", label: "False Negative (FN / Tip II)", type: "number", val: "10" },
+          { id: "cmTN", label: "True Negative (TN)", type: "number", val: "900" }
+        ],
+        compute: (v) => {
+          const tp = Math.max(0, +v.cmTP || 0);
+          const fp = Math.max(0, +v.cmFP || 0);
+          const fn = Math.max(0, +v.cmFN || 0);
+          const tn = Math.max(0, +v.cmTN || 0);
+          const total = tp + fp + fn + tn;
+          const acc = total ? (tp + tn) / total : 0;
+          const prec = tp + fp ? tp / (tp + fp) : 0;
+          const rec = tp + fn ? tp / (tp + fn) : 0;
+          const f1 = prec + rec ? (2 * prec * rec) / (prec + rec) : 0;
+          const fpr = fp + tn ? fp / (fp + tn) : 0;
+          return `<strong>Accuracy:</strong> %${(acc * 100).toFixed(1)} &nbsp;|&nbsp; <strong>Precision:</strong> %${(prec * 100).toFixed(1)} &nbsp;|&nbsp; <strong>Recall (Güç):</strong> %${(rec * 100).toFixed(1)} &nbsp;|&nbsp; <strong>F1-Score:</strong> ${f1.toFixed(3)} &nbsp;|&nbsp; <strong>FPR (Tip I):</strong> %${(fpr * 100).toFixed(1)}`;
+        }
+      },
       "lab-missing": {
         title: "MNAR Yanlılık Simülatörü",
         fields: [

@@ -25,7 +25,7 @@
   * **Bayes Teoremi:** Naive Bayes algoritmasının ve Bayesçi çıkarımın temeli.
 * **Temel Olasılık Dağılımları:** **[Çekirdek]**
   * **Kesikli (Discrete):** Bernoulli, Binom (Binomial), Poisson.
-  * **Sürekli (Continuous):** Normal (Gaussian), Standart Normal (Z-skoru), Üniform ve Üstel (Exponential) dağılım.
+  * **Sürekli (Continuous):** Normal (Gaussian) & Empirik Kural (68-95-99.7), Standart Normal (Z-skoru), Üniform ve Üstel (Exponential) dağılım.
   * *Not:* Dağılımların formüllerini ezberlemek gerekmez. Hangi durumu modellediğini ve parametrelerinin ne anlama geldiğini bilmek yeterlidir.
 * **Korelasyon ve Kovaryans:** **[Çekirdek]** ✱
   * Pearson (doğrusal ilişki) ve Spearman (sıralı/monotonik ilişki) korelasyon katsayıları.
@@ -47,10 +47,13 @@
   * Sıfır Hipotezi ($H_0$), Alternatif Hipotez ($H_1$), Anlamlılık Düzeyi ($\alpha$), **p-değeri** yorumlama ve yaygın yanlış yorumları.
   * Tip I Hata (False Positive), Tip II Hata (False Negative), İstatistiksel Güç (Statistical Power).
   * **Etki Büyüklüğü (Effect Size):** İstatistiksel anlamlılık ile pratik anlamlılığın farkı (Cohen's d vb.).
-  * **Örnekleme dağılımları ve testleri:** t dağılımı → t-testleri (tek örneklem, bağımsız iki örneklem, eşleştirilmiş); F dağılımı → ANOVA; Ki-Kare dağılımı → Ki-Kare Bağımsızlık Testi. *(Dağılımlar testlerle birlikte öğrenilir.)*
+  * **Örnekleme dağılımları ve testleri:** Standart Normal → Z-testi; t dağılımı → t-testleri (tek örneklem, bağımsız iki örneklem, eşleştirilmiş); F dağılımı → ANOVA; Ki-Kare dağılımı → Ki-Kare Bağımsızlık Testi. *(Dağılımlar testlerle birlikte öğrenilir.)*
   * **Varsayım Kontrolleri:** Normallik (Shapiro-Wilk, Q-Q grafiği) ve varyans homojenliği (Levene).
   * **Parametrik Olmayan (Non-parametric) Testler:** Mann-Whitney U, Wilcoxon, Kruskal-Wallis.
   * **Çoklu Test Düzeltmeleri:** Bonferroni, Benjamini-Hochberg (FDR). *(Aynı veriyle çok sayıda özelliği test ederken şans eseri anlamlı sonuçları elemek için.)*
+* **Confusion Matrix ve Sınıflandırma Metrikleri:** **[Çekirdek]** ✱
+  * TP, FP, TN, FN matrisi ve Tip I / Tip II hata, İstatistiksel Güç ve Bayes bağlantısı.
+  * Accuracy, Precision, Recall (Sensitivity), Specificity ve F1-Score; dengesiz sınıflarda doğru metrik seçimi.
 * **Eksik Veri Mekanizmaları:** **[Çekirdek]**
   * MCAR, MAR, MNAR ve bunların imputation (doldurma) kararına etkisi.
 * **Yeniden Örnekleme Yöntemleri (Resampling):** **[Çekirdek]** ✱

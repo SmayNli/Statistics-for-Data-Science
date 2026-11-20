@@ -477,8 +477,8 @@ window.ROADMAP_DATA.push(
     title: "Temel Olasılık Dağılımları",
     tag: "core",
     explainability: false,
-    summary: "Kesikli (Bernoulli, Binom, Poisson) ve Sürekli (Normal, Standart Normal Z-skoru, Üniform, Üstel) dağılımlar.",
-    keywords: ["bernoulli", "binom", "poisson", "normal", "gaussian", "z-skoru", "üniform", "üstel", "exponential"],
+    summary: "Kesikli (Bernoulli, Binom, Poisson) ve Sürekli (Normal, Empirik Kural, Standart Normal Z-skoru, Üniform, Üstel) dağılımlar.",
+    keywords: ["bernoulli", "binom", "poisson", "normal", "gaussian", "empirik kural", "empirical rule", "z-skoru", "üniform", "üstel", "exponential"],
     labId: "lab-normal",
     theoryHtml: `
       <div class="card">
@@ -495,7 +495,7 @@ window.ROADMAP_DATA.push(
         <h3>2. Sürekli (Continuous) Dağılımlar</h3>
         <ul>
           <li><strong>Normal (Gaussian) $\\mathcal{N}(\\mu, \\sigma^2)$:</strong> Doğada ve istatistikte en yaygın çan eğrisi dağılımı. Ortalama $\\mu$ ve standart sapma $\\sigma$ ile tamamen tanımlanır.
-            <ul><li><strong>68-95-99.7 Kuralı:</strong> Verinin ~%68'i $\\mu \\pm 1\\sigma$, ~%95'i $\\mu \\pm 2\\sigma$, ~%99.7'si $\\mu \\pm 3\\sigma$ aralığındadır.</li></ul>
+            <ul><li><strong>Empirik Kural (Empirical Rule / 68-95-99.7 Kuralı):</strong> Normal dağılımda verinin ~%68'i $\\mu \\pm 1\\sigma$, ~%95'i $\\mu \\pm 2\\sigma$, ~%99.7'si $\\mu \\pm 3\\sigma$ aralığındadır.</li></ul>
           </li>
           <li><strong>Standart Normal &amp; Z-skoru:</strong> $\\mu=0, \\sigma=1$ olan Normal dağılımdır. Herhangi bir gözlemin standartlaştırılmış hali:
             <div class="formula-box">$$Z = \\frac{x - \\mu}{\\sigma}$$</div>

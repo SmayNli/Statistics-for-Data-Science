@@ -418,8 +418,8 @@ window.ROADMAP_DATA.push(
     title: "Hipotez Testleri ve Çoklu Test Düzeltmeleri",
     tag: "core",
     explainability: true,
-    summary: "H0/H1, p-değeri, Tip I/II hata, İstatistiksel Güç, Cohen's d, t/F/Ki-kare testleri, varsayım kontrolleri, non-parametrik testler ve Bonferroni/FDR.",
-    keywords: ["hipotez", "p-değeri", "p-value", "tip 1", "tip 2", "güç", "power", "cohen", "t-test", "anova", "ki-kare", "mann-whitney", "bonferroni", "fdr"],
+    summary: "H0/H1, p-değeri, Tip I/II hata, İstatistiksel Güç, Cohen's d, Z/t/F/Ki-kare testleri, varsayım kontrolleri, non-parametrik testler ve Bonferroni/FDR.",
+    keywords: ["hipotez", "p-değeri", "p-value", "tip 1", "tip 2", "güç", "power", "cohen", "z-test", "z-testi", "t-test", "anova", "ki-kare", "mann-whitney", "bonferroni", "fdr"],
     labId: "lab-hypothesis",
     theoryHtml: `
       <div class="card">
@@ -441,13 +441,21 @@ window.ROADMAP_DATA.push(
       </div>
 
       <div class="card">
-        <h3>3. Hangi Test Ne Zaman Kullanılır?</h3>
+        <h3>3. Z-Testi vs. T-Testi ve Hangi Test Ne Zaman Kullanılır?</h3>
+        <p><strong>Z-Testi ile T-Testi Arasındaki Fark Nedir?</strong> İkisi de örneklem ortalamasını karşılaştırır; temel fark popülasyon standart sapmasını ($\\sigma$) bilip bilmediğimizdir:</p>
+        <ul>
+          <li><strong>Z-Testi:</strong> Popülasyon standart sapması $\\sigma$ <strong>biliniyorsa</strong> veya çok büyük örneklemde ($n \\ge 30$) oran/ortalama testi yapılıyorsa Standart Normal dağılım kullanılır:
+            <div class="formula-box">$$Z = \\frac{\\bar{x} - \\mu_0}{\\sigma / \\sqrt{n}}$$</div>
+          </li>
+          <li><strong>T-Testi:</strong> Gerçek dünya problemlerinin çoğunda popülasyonun $\\sigma$'sını bilmeyiz; onun yerine örneklem standart sapması $s$'yi kullanırız. $s$ de bir tahmin olduğu için ekstra belirsizlik eklenir ve özellikle küçük örneklemlerde daha kalın kuyruklu <strong>$t$-dağılımı</strong> gerekir ($n$ büyüdükçe $t$-dağılımı $Z$'ye yaklaşır).</li>
+        </ul>
         <div class="table-wrap">
           <table class="info-table">
             <thead><tr><th>Senaryo</th><th>Parametrik Test</th><th>Non-Parametrik Alternatif</th></tr></thead>
             <tbody>
-              <tr><td>Tek grup ortalaması vs hedef değer</td><td>Tek Örneklem t-testi</td><td>Wilcoxon İşaretli Sıra</td></tr>
-              <tr><td>2 bağımsız grup karşılaştırması</td><td>Bağımsız 2 Örneklem t-testi</td><td>Mann-Whitney U</td></tr>
+              <tr><td>Tek grup ortalaması (<strong>$\\sigma$ biliniyor</strong> / büyük $n$ oran)</td><td>Z-testi</td><td>Binom / İşaret Testi</td></tr>
+              <tr><td>Tek grup ortalaması (<strong>$\\sigma$ bilinmiyor</strong>)</td><td>Tek Örneklem t-testi</td><td>Wilcoxon İşaretli Sıra</td></tr>
+              <tr><td>2 bağımsız grup karşılaştırması</td><td>Bağımsız 2 Örneklem t-testi (veya büyük $n$ Z-testi)</td><td>Mann-Whitney U</td></tr>
               <tr><td>Aynı kişilerin öncesi / sonrası</td><td>Eşleştirilmiş (Paired) t-testi</td><td>Wilcoxon</td></tr>
               <tr><td>3+ grup ortalaması karşılaştırması</td><td>ANOVA (F-dağılımı)</td><td>Kruskal-Wallis</td></tr>
               <tr><td>2 kategorik değişken bağımsızlığı</td><td>Ki-Kare ($\\chi^2$) Bağımsızlık Testi</td><td>Fisher'ın Kesin Testi</td></tr>
@@ -489,6 +497,18 @@ window.ROADMAP_DATA.push(
         ],
         answer: "Yeni anlamlılık eşiği = 0.001.",
         interpretation: "p-değeri 0.02 olan bir özellik düzeltmesiz anlamlı görünse de Bonferroni sonrası (0.02 > 0.001) şans eseri çıkmış olabileceği için elenir."
+      },
+      {
+        title: "Örnek 3: Z-Testi ile Sistem Gecikmesi Kontrolü (σ Biliniyor)",
+        problem: "Bir API servisinin tarihsel ortalama yanıt süresi $\\mu_0 = 100$ ms ve popülasyon standart sapması bilinen şekilde $\\sigma = 15$ ms'dir. Güncelleme sonrası $n = 36$ isteğin ortalaması $\\bar{x} = 106$ ms ölçülmüştür. $\\alpha = 0.05$ (çift yönlü kritik $|Z| = 1.96$) düzeyinde gecikme anlamlı şekilde değişmiş midir?",
+        steps: [
+          "Popülasyon $\\sigma$ bilindiği için t-testi değil <strong>Z-testi</strong> uygulanır.",
+          "Standart hata: $SE = \\sigma / \\sqrt{n} = 15 / \\sqrt{36} = 15 / 6 = 2.5$ ms.",
+          "Z-istatistiği: $Z = (106 - 100) / 2.5 = 2.40$.",
+          "$|Z| = 2.40 > 1.96$ ($p \\approx 0.016 < 0.05$) olduğundan $H_0$ reddedilir."
+        ],
+        answer: "Z = +2.40 (p ≈ 0.016). Yanıt süresindeki +6 ms'lik artış istatistiksel olarak anlamlıdır.",
+        interpretation: "Gözlenen 6 ms'lik fark, rastgele standart hata (2.5 ms) cinsinden 2.4 standart sapma uzakta olduğu için şansla açıklanamaz; güncelleme API'yi yavaşlatmıştır."
       }
     ],
     questions: [
@@ -574,10 +594,168 @@ window.ROADMAP_DATA.push(
   },
 
   {
-    id: "l2-missing",
+    id: "l2-metrics",
     level: 2,
     levelTitle: "2. Orta Seviye: Çıkarımsal İstatistik (Inferential Statistics)",
     order: 10,
+    title: "Confusion Matrix ve Sınıflandırma Metrikleri",
+    tag: "core",
+    explainability: true,
+    summary: "TP, FP, TN, FN matrisi; Tip I/II hata ve Bayes bağlantısı; Accuracy, Precision, Recall ve F1-Score.",
+    keywords: ["confusion matrix", "accuracy", "precision", "recall", "f1", "f1-score", "sensitivity", "specificity", "tip 1", "tip 2"],
+    labId: "lab-confusion",
+    theoryHtml: `
+      <div class="card">
+        <h3>1. Confusion Matrix (Karışıklık Matrisi) ve Hipotez Testi Bağlantısı</h3>
+        <p>Bir ikili sınıflandırma modelinin (ör. Fraud var/yok, Hasta/Sağlıklı) tahminlerini gerçek durumla karşılaştıran $2 \\times 2$ tabloya <strong>Confusion Matrix</strong> denir. Aslında bu tablo, Konu 9'daki Hipotez Testi hatalarının makine öğrenmesindeki birebir karşılığıdır:</p>
+        <div class="table-wrap">
+          <table class="info-table">
+            <thead><tr><th></th><th>Gerçek: Pozitif (1)</th><th>Gerçek: Negatif (0)</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Tahmin: Pozitif (1)</strong></td><td><strong>TP (True Positive)</strong> — Doğru tespit (İstatistiksel Güç)</td><td><strong>FP (False Positive)</strong> — Yanlış alarm (<strong>Tip I Hata, $\\alpha$</strong>)</td></tr>
+              <tr><td><strong>Tahmin: Negatif (0)</strong></td><td><strong>FN (False Negative)</strong> — Kaçırılan vaka (<strong>Tip II Hata, $\\beta$</strong>)</td><td><strong>TN (True Negative)</strong> — Doğru eleme</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>2. Accuracy, Precision, Recall ve F1-Score Ne Anlatır?</h3>
+        <ul>
+          <li><strong>Accuracy (Doğruluk):</strong> Tüm tahminlerin yüzde kaçı doğru?
+            <div class="formula-box">$$\\text{Accuracy} = \\frac{TP + TN}{TP + TN + FP + FN}$$</div>
+            <em>Ne zaman yanıltır?</em> Dengesiz verilerde (ör. %99 normal, %1 fraud) her şeye "normal" diyen işe yaramaz bir model bile %99 Accuracy alır (<em>Accuracy Paradox</em>)!
+          </li>
+          <li><strong>Precision (Kesinlik):</strong> Modelin <strong>"Pozitif" dediği</strong> vakaların yüzde kaçı gerçekten pozitif? (Bayes Teoremi'ndeki $P(\\text{Gerçek}+ \\mid \\text{Tahmin}+)$ değeridir!)
+            <div class="formula-box">$$\\text{Precision} = \\frac{TP}{TP + FP}$$</div>
+            <em>Ne zaman kritiktir?</em> Yanlış alarmın (FP) pahalı olduğu durumlarda (örn. spam filtresinde önemli iş mailini spam'a atmamak, müşteriye hatalı suçlama/bloke koymamak).
+          </li>
+          <li><strong>Recall / Sensitivity (Duyarlılık):</strong> Gerçekte pozitif olan tüm vakaların yüzde kaçını yakalayabildik? (Hipotez testindeki <strong>İstatistiksel Güç $= 1 - \\beta$</strong>'nın birebir karşılığıdır!)
+            <div class="formula-box">$$\\text{Recall} = \\frac{TP}{TP + FN}$$</div>
+            <em>Ne zaman kritiktir?</em> Kaçırılan vakanın (FN) çok tehlikeli olduğu durumlarda (örn. kanser teşhisi, dolandırıcılık tespiti, arıza tahmini).
+          </li>
+          <li><strong>F1-Score:</strong> Precision ile Recall'un <strong>harmonik ortalamasıdır</strong>:
+            <div class="formula-box">$$F_1 = 2 \\cdot \\frac{\\text{Precision} \\cdot \\text{Recall}}{\\text{Precision} + \\text{Recall}} = \\frac{2TP}{2TP + FP + FN}$$</div>
+            <strong>Neden aritmetik değil de harmonik ortalama?</strong> Aritmetik ortalama kullansaydık Precision = 1.0, Recall = 0.02 olan bir model bile 0.51 alırdı. Harmonik ortalama küçük olan sayıya yakın çekilir; yani F1'in yüksek çıkması için <strong>hem Precision'ın hem Recall'un aynı anda iyi olması</strong> gerekir.
+          </li>
+        </ul>
+        <div class="callout explain">
+          <strong>✱ Açıklanabilirlik Bağlantısı:</strong> İş birimlerine sadece "Modelimizin doğruluğu %94" demek yerine Confusion Matrix üzerinden "100 gerçek dolandırıcılığın 80'ini yakalıyoruz (Recall %80), ancak her 10 alarmdan ~5'i yanlış alarm (Precision %44)" demek gerçek iş maliyetini ve karar eşiğini (threshold) şeffaf biçimde anlatır.
+        </div>
+      </div>
+    `,
+    examples: [
+      {
+        title: "Örnek 1: Dengesiz Fraud Veri Setinde 4 Metriğin Hesabı",
+        problem: "1.000 kredi kartı işleminde 50 gerçek fraud vardır. Model 40 fraud'u yakalamış (TP=40), 10'unu kaçırmış (FN=10); ayrıca 50 normal işleme yanlışlıkla fraud alarmı vermiş (FP=50) ve 900 normal işlemi doğru geçmiş (TN=900). Accuracy, Precision, Recall ve F1-Score'u hesaplayın.",
+        steps: [
+          "Accuracy = $(40 + 900) / 1000 = 940 / 1000 = 0.94$ (%94.0).",
+          "Precision = $40 / (40 + 50) = 40 / 90 \\approx 0.444$ (%44.4).",
+          "Recall = $40 / (40 + 10) = 40 / 50 = 0.80$ (%80.0).",
+          "F1-Score = $2 \\times \\frac{0.4444 \\times 0.80}{0.4444 + 0.80} = \\frac{0.7111}{1.2444} \\approx 0.571$ (%57.1)."
+        ],
+        answer: "Accuracy = %94.0, Precision = %44.4, Recall = %80.0, F1-Score = %57.1.",
+        interpretation: "Accuracy %94 gibi çok yüksek görünse de modelin ürettiği 90 alarmın 50'si yanlış alarm olduğu için Precision %44.4'tür. Öte yandan gerçek dolandırıcılıkların %80'ini yakaladığı için Recall güçlüdür. F1 (%57.1) ise bu iki metriğin dengeli özetini verir."
+      },
+      {
+        title: "Örnek 2: Accuracy Tuzağı (Accuracy Paradox)",
+        problem: "1.000 işlemden sadece 10'u fraud (%1). Hiç öğrenmeyen ve gelen her işleme 'Normal (0)' diyen bir sahte modelin Accuracy ve Recall değerleri ne olur?",
+        steps: [
+          "TP = 0, FP = 0, FN = 10, TN = 990.",
+          "Accuracy = $(0 + 990) / 1000 = \\%99.0$.",
+          "Recall = $0 / (0 + 10) = \\%0$ (Precision ise $0/0$ tanımsız)."
+        ],
+        answer: "Accuracy = %99.0, Recall = %0.",
+        interpretation: "Model tek bir fraud bile yakalamadan %99 doğruluk almıştır! Bu yüzden sınıf dengesizliği (class imbalance) olduğunda Accuracy asla tek başına kullanılmamalıdır."
+      }
+    ],
+    questions: [
+      {
+        id: "l2-met-q1",
+        type: "numeric",
+        category: "Hesaplama",
+        prompt: "Bir sınıflandırma modelinin test sonuçları: $TP = 80$, $FP = 20$, $FN = 40$, $TN = 860$. Modelin <strong>Precision (%)</strong> değeri kaçtır?",
+        hint: "Precision = TP / (TP + FP) * 100",
+        answer: 80,
+        tolerance: 0.1,
+        unit: "%",
+        solutionSteps: [
+          "$\\text{Precision} = \\frac{80}{80 + 20} = \\frac{80}{100} = 0.80 = \\%80$."
+        ],
+        dsNote: "Modelin pozitif tahmin ettiği 100 örneğin 80'i gerçekten pozitiftir (%20 yanlış alarm oranı)."
+      },
+      {
+        id: "l2-met-q2",
+        type: "numeric",
+        category: "Hesaplama",
+        prompt: "Aynı test sonuçlarında ($TP = 80$, $FP = 20$, $FN = 40$, $TN = 860$) modelin <strong>Recall (%)</strong> değeri kaçtır? (1 ondalık basamak)",
+        hint: "Recall = TP / (TP + FN) * 100",
+        answer: 66.7,
+        tolerance: 0.2,
+        unit: "%",
+        solutionSteps: [
+          "Gerçek pozitif sayısı = $TP + FN = 80 + 40 = 120$.",
+          "$\\text{Recall} = \\frac{80}{120} \\approx 0.6667 = \\%66.7$."
+        ],
+        dsNote: "Gerçek 120 pozitif vakanın 40'ı (%33.3'ü) model tarafından kaçırılmıştır (Tip II Hata / False Negative)."
+      },
+      {
+        id: "l2-met-q3",
+        type: "numeric",
+        category: "Hesaplama",
+        prompt: "Bir modelin Precision değeri $0.60$ ve Recall değeri $0.40$ olarak ölçülmüştür. Bu modelin <strong>F1-Score</strong> değeri (0 ile 1 arasında) kaçtır?",
+        hint: "F1 = 2 * P * R / (P + R)",
+        answer: 0.48,
+        tolerance: 0.01,
+        unit: "",
+        solutionSteps: [
+          "$F_1 = 2 \\times \\frac{0.60 \\times 0.40}{0.60 + 0.40} = \\frac{0.48}{1.00} = 0.48$."
+        ],
+        dsNote: "Dikkat: Aritmetik ortalama 0.50 çıkarken, harmonik ortalama olan F1-Score düşük tarafa doğru çekilerek 0.48 çıkar."
+      },
+      {
+        id: "l2-met-q4",
+        type: "mcq",
+        category: "Veri Bilimi Problemi",
+        prompt: "Bir hastanede erken evre kanser taraması için ML modeli kuruyorsunuz. Hasta bir kişiyi 'sağlıklı' sanıp eve göndermenin (FN) maliyeti, sağlıklı bir kişiye ek tetkik istemenin (FP) maliyetinden katbekat büyüktür. Model karar eşiğini ayarlarken hangi metriği önceliklendirmelisiniz?",
+        options: [
+          "Precision — yanlış alarm sayısını sıfıra indirmek için",
+          "Recall (Duyarlılık) — gerçek hastaların hiçbirini kaçırmamak (FN'yi düşürmek) için",
+          "Sadece Accuracy — genel oran yüksek çıksın diye",
+          "Specificity — negatifleri korumak için"
+        ],
+        answerIndex: 1,
+        solutionSteps: [
+          "Kaçırılan hasta (FN) Tip II hatadır ve hayati risk taşır.",
+          "Karar eşiğini düşürerek daha fazla şüpheli vakayı yakalamak Recall'u yükseltir."
+        ],
+        dsNote: "Tıbbi tarama, fraud ve güvenlik alarmı gibi alanlarda Recall kritikken; spam filtresi veya çocuk içerik önerisinde Precision kritik olur."
+      },
+      {
+        id: "l2-met-q5",
+        type: "mcq",
+        category: "Veri Bilimi Problemi",
+        prompt: "E-posta spam veya nadir arıza tespiti gibi pozitif sınıfın sadece %1 olduğu bir veri setinde yönetici 'Model %99 Accuracy alıyor, mükemmel!' diyor. Neden dikkatli olmalısınız?",
+        options: [
+          "%99 Accuracy her zaman mükemmel model demektir.",
+          "Sınıf dengesizliği nedeniyle her gözleme 'Negatif (0)' diyen aptal bir model bile %99 Accuracy alır; Precision, Recall, F1 veya PR-AUC kontrol edilmelidir.",
+          "Confusion Matrix sadece regresyon modellerinde kullanılır.",
+          "Accuracy formülünde TP yer almaz."
+        ],
+        answerIndex: 1,
+        solutionSteps: [
+          "Pozitif sınıf %1 iken tüm tahminleri 0 yapmak TN=%99, FN=%1 üretir → Accuracy = %99 ama Recall = %0."
+        ],
+        dsNote: "Dengesiz sınıflandırma projelerinde mutlaka Confusion Matrix ile birlikte F1-Score veya PR-AUC raporlanmalıdır."
+      }
+    ]
+  },
+
+  {
+    id: "l2-missing",
+    level: 2,
+    levelTitle: "2. Orta Seviye: Çıkarımsal İstatistik (Inferential Statistics)",
+    order: 11,
     title: "Eksik Veri Mekanizmaları (MCAR, MAR, MNAR)",
     tag: "core",
     explainability: false,
@@ -696,7 +874,7 @@ window.ROADMAP_DATA.push(
     id: "l2-resampling",
     level: 2,
     levelTitle: "2. Orta Seviye: Çıkarımsal İstatistik (Inferential Statistics)",
-    order: 11,
+    order: 12,
     title: "Yeniden Örnekleme Yöntemleri (Resampling)",
     tag: "core",
     explainability: true,
@@ -829,7 +1007,7 @@ window.ROADMAP_DATA.push(
     id: "l2-regression",
     level: 2,
     levelTitle: "2. Orta Seviye: Çıkarımsal İstatistik (Inferential Statistics)",
-    order: 12,
+    order: 13,
     title: "Regresyonun İstatistiksel Temelleri ve GLM",
     tag: "core",
     explainability: true,
@@ -974,7 +1152,7 @@ window.ROADMAP_DATA.push(
     id: "l2-biasvar",
     level: 2,
     levelTitle: "2. Orta Seviye: Çıkarımsal İstatistik (Inferential Statistics)",
-    order: 13,
+    order: 14,
     title: "Yanlılık-Varyans Dengesi (Bias-Variance Tradeoff)",
     tag: "core",
     explainability: false,
@@ -1102,7 +1280,7 @@ window.ROADMAP_DATA.push(
     id: "l2-abtest",
     level: 2,
     levelTitle: "2. Orta Seviye: Çıkarımsal İstatistik (Inferential Statistics)",
-    order: 14,
+    order: 15,
     title: "Deney Tasarımı ve A/B Test Pratiği",
     tag: "optional",
     explainability: false,
